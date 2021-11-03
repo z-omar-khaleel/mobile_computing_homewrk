@@ -66,7 +66,16 @@ class LoginScreen extends StatelessWidget {
                           height: size.height * .03,
                         ),
                         TextFormField(
-                          decoration: InputDecoration(hintText: 'Password'),
+                          decoration: InputDecoration(
+                              hintText: 'Password',
+                              suffixIcon: InkWell(
+                                onTap: () {
+                                  ref.changVisability();
+                                },
+                                child: Icon(ref.isPass
+                                    ? Icons.visibility_off_outlined
+                                    : Icons.visibility_outlined),
+                              )),
                           controller: ref.passController,
                           validator: (val) {
                             if (val == null || val.trim().isEmpty) {
@@ -74,6 +83,7 @@ class LoginScreen extends StatelessWidget {
                             }
                             return null;
                           },
+                          obscureText: ref.isPass,
                         ),
                         SizedBox(
                           height: size.height * .08,
