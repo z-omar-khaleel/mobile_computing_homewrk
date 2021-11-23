@@ -18,6 +18,7 @@ class LoginScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
+          reverse: true,
           child: Column(
             children: [
               SizedBox(
@@ -104,15 +105,15 @@ class LoginScreen extends StatelessWidget {
               ),
               Wrap(
                 children: [
-                  Text('You Don\'t Have An Account '),
+                  Text('You Don\'t Have An Account ',
+                      style: TextStyle(
+                        color: Colors.black87,
+                      )),
                   InkWell(
                     onTap: () {
                       Get.to(SignUp());
                     },
-                    child: Text('Sign Up',
-                        style: TextStyle(
-                          color: Colors.blue,
-                        )),
+                    child: Text('Sign Up'),
                   )
                 ],
               )

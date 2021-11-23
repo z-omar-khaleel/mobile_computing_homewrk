@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:mobile_computing_homework/login.dart';
 
 import 'controller.dart';
+import 'info_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,6 +15,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      theme: ThemeData(
+          primaryColor: Colors.blue,
+          primarySwatch: Colors.blue,
+          textTheme: TextTheme(
+              bodyText2: TextStyle(fontSize: 16, color: Colors.blue))),
       debugShowCheckedModeBanner: false,
       home: SplashScreen(),
     );
@@ -48,6 +54,8 @@ class _SplashScreenState extends State<SplashScreen> {
         backgroundColor: Colors.blue,
         body: Center(
           child: Image(
+            width: 130,
+            height: 130,
             image: AssetImage("assets/images/splash.png"),
           ),
         ));

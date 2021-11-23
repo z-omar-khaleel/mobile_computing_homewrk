@@ -17,6 +17,7 @@ class SignUp extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
+          reverse: true,
           child: Column(
             children: [
               SizedBox(
@@ -146,15 +147,15 @@ class SignUp extends StatelessWidget {
               ),
               Wrap(
                 children: [
-                  Text('You  Have An Account '),
+                  Text('You  Have An Account ',
+                      style: TextStyle(
+                        color: Colors.black87,
+                      )),
                   InkWell(
                     onTap: () {
                       Get.back();
                     },
-                    child: Text('Login',
-                        style: TextStyle(
-                          color: Colors.blue,
-                        )),
+                    child: Text('Login'),
                   )
                 ],
               )
