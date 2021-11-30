@@ -20,7 +20,7 @@ class SignUp extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(
-                height: size.height * .06,
+                height: size.height * .05,
               ),
               Center(
                 child: Column(
@@ -44,7 +44,7 @@ class SignUp extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: size.height * .09,
+                height: size.height * .05,
               ),
               GetBuilder<ControllerApp>(builder: (ref) {
                 return Form(
