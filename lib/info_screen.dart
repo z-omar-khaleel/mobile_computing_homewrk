@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile_computing_homework/home_screen.dart';
 
 import 'controller.dart';
 
@@ -28,7 +29,7 @@ class _InfoScreenState extends State<InfoScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: size.height * .1,
+                  height: size.height * .06,
                 ),
                 Center(
                   child: SizedBox(
@@ -137,8 +138,12 @@ class _InfoScreenState extends State<InfoScreen> {
                               icon: Icon(Icons.minimize,
                                   color: Colors.blue, size: 20),
                               onPressed: () {
-                                logic.weightController.text =
-                                    '${int.parse(logic.weightController.text) - 1}';
+                                if (!(int.parse(logic.weightController.text) <=
+                                        10) &&
+                                    (!(int.parse(logic.weightController.text) >=
+                                        220)))
+                                  logic.weightController.text =
+                                      '${int.parse(logic.weightController.text) - 1}';
                               },
                               padding: EdgeInsets.zero,
                               alignment: Alignment.topCenter,
@@ -168,8 +173,10 @@ class _InfoScreenState extends State<InfoScreen> {
                               icon:
                                   Icon(Icons.add, color: Colors.blue, size: 20),
                               onPressed: () {
-                                logic.weightController.text =
-                                    '${int.parse(logic.weightController.text) + 1}';
+                                if (!(int.parse(logic.weightController.text) >=
+                                    220))
+                                  logic.weightController.text =
+                                      '${int.parse(logic.weightController.text) + 1}';
                               },
                               padding: EdgeInsets.zero,
                               alignment: Alignment.center,
@@ -215,8 +222,12 @@ class _InfoScreenState extends State<InfoScreen> {
                               icon: Icon(Icons.minimize,
                                   color: Colors.blue, size: 20),
                               onPressed: () {
-                                logic.heightController.text =
-                                    '${int.parse(logic.heightController.text) - 1}';
+                                if (!(int.parse(logic.heightController.text) <=
+                                        100) &&
+                                    (!(int.parse(logic.heightController.text) >=
+                                        220)))
+                                  logic.heightController.text =
+                                      '${int.parse(logic.heightController.text) - 1}';
                               },
                               padding: EdgeInsets.zero,
                               alignment: Alignment.topCenter,
@@ -247,8 +258,10 @@ class _InfoScreenState extends State<InfoScreen> {
                               icon:
                                   Icon(Icons.add, color: Colors.blue, size: 20),
                               onPressed: () {
-                                logic.heightController.text =
-                                    '${int.parse(logic.heightController.text) + 1}';
+                                if (!(int.parse(logic.heightController.text) >=
+                                    220))
+                                  logic.heightController.text =
+                                      '${int.parse(logic.heightController.text) + 1}';
                               },
                               padding: EdgeInsets.zero,
                               alignment: Alignment.center,
@@ -303,7 +316,16 @@ class _InfoScreenState extends State<InfoScreen> {
                     height: 48,
                     width: double.infinity,
                     child: ElevatedButton(
-                        onPressed: () {}, child: Text('Save Data')))
+                        onPressed: () {
+                          if (logic.dateController.text.isNotEmpty) {
+                            Get.offAll(HomeScreen());
+                          } else {
+                            Get.snackbar('Complete Information',
+                                'Please Select Date Of Birth ',
+                                backgroundColor: Colors.blue);
+                          }
+                        },
+                        child: Text('Save Data')))
               ],
             ),
           );

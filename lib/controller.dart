@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_computing_homework/info_screen.dart';
-import 'package:mobile_computing_homework/sign_up.dart';
 
 class ControllerApp extends GetxController {
   final formKey = GlobalKey<FormState>();
   final formKeyRegister = GlobalKey<FormState>();
   var userController = TextEditingController();
   var dateController = TextEditingController();
-  var weightController = TextEditingController(text: '0');
+  var weightController = TextEditingController(text: '10');
   String gender = 'Male';
+  bool fromRegister = false;
 
-  var heightController = TextEditingController(text: '0');
+  var heightController = TextEditingController(text: '100');
   var userNameController = TextEditingController();
   var passController = TextEditingController();
   var passRegisterController = TextEditingController();
@@ -32,6 +32,8 @@ class ControllerApp extends GetxController {
 
   validateLogin() {
     if (formKey.currentState!.validate()) {
+      fromRegister = false;
+
       Get.offAll(InfoScreen());
     }
   }
@@ -39,11 +41,31 @@ class ControllerApp extends GetxController {
   validateRegister() {
     if (formKeyRegister.currentState!.validate()) {
       Get.offAll(InfoScreen());
+      fromRegister = true;
     }
   }
 
   changeGender(String val) {
     gender = val;
     update();
+  }
+
+  closeAllController() {
+    userController.clear();
+    dateController.clear();
+    weightController.text = '10';
+    heightController.text = '100';
+    userNameController.clear();
+    passController.clear();
+    passRegisterController.clear();
+    emailController.clear();
+    rePassController.clear();
+  }
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+    closeAllController();
   }
 }

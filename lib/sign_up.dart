@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_computing_homework/controller.dart';
-import 'package:mobile_computing_homework/login.dart';
 
 class SignUp extends StatelessWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -21,7 +20,7 @@ class SignUp extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(
-                height: size.height * .1,
+                height: size.height * .06,
               ),
               Center(
                 child: Column(

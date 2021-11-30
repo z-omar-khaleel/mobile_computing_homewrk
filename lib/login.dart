@@ -22,7 +22,7 @@ class LoginScreen extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(
-                height: size.height * .1,
+                height: size.height * .06,
               ),
               Center(
                 child: Column(

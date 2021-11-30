@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:mobile_computing_homework/login.dart';
 
 import 'controller.dart';
-import 'info_screen.dart';
+import 'home_screen.dart';
 
 void main() {
   runApp(MyApp());
