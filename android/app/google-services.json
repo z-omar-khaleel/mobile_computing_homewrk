@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "392181317825",
+    "firebase_url": "https://todolistahmed.firebaseio.com",
+    "project_id": "todolistahmed",
+    "storage_bucket": "todolistahmed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:392181317825:android:d340a3a8c559bef9595440",
+        "android_client_info": {
+          "package_name": "com.example.mobile_computing_homework"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "392181317825-h0jun0sd2omr0jep7kg20egd03rud71s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3QVORhsLprC3gEKf4mfZ-srhW4WIe6P0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "392181317825-h0jun0sd2omr0jep7kg20egd03rud71s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:392181317825:android:ad934ab51f266d85595440",
+        "android_client_info": {
+          "package_name": "com.example.to_do_list"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "392181317825-h0jun0sd2omr0jep7kg20egd03rud71s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3QVORhsLprC3gEKf4mfZ-srhW4WIe6P0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "392181317825-h0jun0sd2omr0jep7kg20egd03rud71s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

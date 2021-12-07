@@ -37,6 +37,11 @@ dependencies:
   get: ^4.3.8
   shared_preferences: ^2.0.8
   intl:
+  firebase_core: "^1.10.2"
+  firebase_auth: ^3.3.0
+  cloud_firestore: "^3.1.1"
+  image_picker: ^0.8.4+4
+
 
 
 

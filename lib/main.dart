@@ -1,13 +1,25 @@
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mobile_computing_homework/login.dart';
+import 'package:mobile_computing_homework/utils/constant.dart';
+import 'package:mobile_computing_homework/screens/login.dart';
+import 'package:mobile_computing_homework/utils/sharePref.dart';
 
-import 'controller.dart';
-import 'home_screen.dart';
+import 'controller/controller.dart';
+import 'screens/home_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  final ref = Get.put(ControllerApp());
+  userId = await SharePref.getData(key: 'user');
+  if (userId != null) {
+    ref.getUserData();
+    ref.fetchRecords();
+  }
+
   runApp(MyApp());
 }
 
@@ -16,6 +28,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       theme: ThemeData(
+          snackBarTheme: SnackBarThemeData(
+            backgroundColor: Colors.blue,
+          ),
           primaryColor: Colors.blue,
           primarySwatch: Colors.blue,
           textTheme: TextTheme(
@@ -44,12 +59,17 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    x = Timer(const Duration(seconds: 3), () => Get.off(() => LoginScreen()));
+    x = Timer(const Duration(seconds: 3), () {
+      if (userId == null) {
+        Get.off(() => LoginScreen());
+      } else {
+        Get.off(() => HomeScreen());
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final x = Get.put(ControllerApp());
     return const Scaffold(
         backgroundColor: Colors.blue,
         body: Center(

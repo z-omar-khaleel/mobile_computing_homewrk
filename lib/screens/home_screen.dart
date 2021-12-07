@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
-import 'package:mobile_computing_homework/login.dart';
+import 'package:mobile_computing_homework/screens/add_food.dart';
+import 'package:mobile_computing_homework/screens/login.dart';
 
-import 'controller.dart';
+import '../controller/controller.dart';
+import 'add_records.dart';
 
 class HomeScreen extends StatelessWidget {
   var x = Get.put(ControllerApp());
@@ -30,7 +32,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 Center(
                   child: Text(
-                    'Hi ${logic.fromRegister ? logic.userNameController.text : logic.userController.text}',
+                    'Hi ${logic.userInformation!.name}',
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.black),
                   ),
@@ -50,7 +52,7 @@ class HomeScreen extends StatelessWidget {
                       border: Border.all(color: Colors.blue),
                       borderRadius: BorderRadius.circular(12)),
                   child: Text(
-                    'Normal (Still Good)',
+                    '${logic.bmiStatus} (Still Good)',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.grey.withOpacity(.7),
@@ -68,47 +70,53 @@ class HomeScreen extends StatelessWidget {
                   height: size.height * .35,
                   color: Colors.blue.shade600,
                   child: ListView.builder(
-                    itemBuilder: (c, i) => Container(
-                      margin:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white),
-                      child: Table(
-                        defaultColumnWidth: FixedColumnWidth(120.0),
-                        border: TableBorder.all(
-                            color: Colors.lightBlue,
-                            style: BorderStyle.solid,
-                            width: 1),
-                        children: [
-                          TableRow(children: [
-                            Column(children: [
-                              Text('20/10/2021',
-                                  style: TextStyle(
-                                      fontSize: 16.0, color: Colors.black87))
-                            ]),
-                            Column(children: [
-                              Text('60 kg',
-                                  style: TextStyle(
-                                      fontSize: 16.0, color: Colors.black87))
-                            ]),
-                          ]),
-                          TableRow(children: [
-                            Column(children: [
-                              Text('Normal',
-                                  style: TextStyle(
-                                      fontSize: 16.0, color: Colors.black87))
-                            ]),
-                            Column(children: [
-                              Text('170 cm',
-                                  style: TextStyle(
-                                      fontSize: 16.0, color: Colors.black87))
-                            ]),
-                          ]),
-                        ],
-                      ),
-                    ),
-                    itemCount: 20,
+                    itemBuilder: (c, i) => logic.records.isEmpty
+                        ? Container()
+                        : Container(
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white),
+                            child: Table(
+                              defaultColumnWidth: FixedColumnWidth(120.0),
+                              border: TableBorder.all(
+                                  color: Colors.lightBlue,
+                                  style: BorderStyle.solid,
+                                  width: 1),
+                              children: [
+                                TableRow(children: [
+                                  Column(children: [
+                                    Text(logic.records[i].dateTime,
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black87))
+                                  ]),
+                                  Column(children: [
+                                    Text('${logic.records[i].weight} kg',
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black87))
+                                  ]),
+                                ]),
+                                TableRow(children: [
+                                  Column(children: [
+                                    Text(logic.records[i].status,
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black87))
+                                  ]),
+                                  Column(children: [
+                                    Text('${logic.records[i].height} cm',
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black87))
+                                  ]),
+                                ]),
+                              ],
+                            ),
+                          ),
+                    itemCount: logic.records.length,
                   ),
                 ),
                 SizedBox(
@@ -120,11 +128,17 @@ class HomeScreen extends StatelessWidget {
                     SizedBox(
                         width: size.width * .42,
                         child: ElevatedButton(
-                            onPressed: () {}, child: Text('Add Food'))),
+                            onPressed: () {
+                              Get.to(AddFood());
+                            },
+                            child: Text('Add Food'))),
                     SizedBox(
                         width: size.width * .42,
                         child: ElevatedButton(
-                            onPressed: () {}, child: Text('Add Record'))),
+                            onPressed: () {
+                              Get.to(AddRecord());
+                            },
+                            child: Text('Add Record'))),
                   ],
                 ),
                 SizedBox(

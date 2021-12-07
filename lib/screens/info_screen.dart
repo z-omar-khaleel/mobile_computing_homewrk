@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mobile_computing_homework/home_screen.dart';
+import 'package:mobile_computing_homework/screens/home_screen.dart';
 
-import 'controller.dart';
+import '../controller/controller.dart';
 
 class InfoScreen extends StatefulWidget {
   const InfoScreen({Key? key}) : super(key: key);
@@ -297,7 +297,7 @@ class _InfoScreenState extends State<InfoScreen> {
                       alignment: Alignment.center,
                       child: TextFormField(
                         onTap: () {
-                          _selectDate(context);
+                          selectDate(context);
                         },
                         keyboardType: TextInputType.datetime,
                         textAlign: TextAlign.center,
@@ -318,6 +318,7 @@ class _InfoScreenState extends State<InfoScreen> {
                     child: ElevatedButton(
                         onPressed: () {
                           if (logic.dateController.text.isNotEmpty) {
+                            logic.findBmi();
                             Get.offAll(HomeScreen());
                           } else {
                             Get.snackbar('Complete Information',
@@ -335,7 +336,7 @@ class _InfoScreenState extends State<InfoScreen> {
   }
 }
 
-_selectDate(BuildContext context) async {
+selectDate(BuildContext context) async {
   var contrller = Get.find<ControllerApp>();
   final DateTime? selected = await showDatePicker(
     context: context,

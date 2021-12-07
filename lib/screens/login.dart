@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mobile_computing_homework/controller.dart';
+import 'package:mobile_computing_homework/controller/controller.dart';
+import 'package:mobile_computing_homework/screens/sign_up.dart';
 
-class SignUp extends StatelessWidget {
-  const SignUp({Key? key}) : super(key: key);
+class LoginScreen extends StatelessWidget {
+  LoginScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +22,13 @@ class SignUp extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(
-                height: size.height * .05,
+                height: size.height * .06,
               ),
               Center(
                 child: Column(
                   children: [
                     Text(
-                      'Create New Account',
+                      'Welcome Back',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.blue,
@@ -34,7 +36,7 @@ class SignUp extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text('If you do not already have account ',
+                    Text('If you already have account login',
                         style: TextStyle(
                           color: Colors.grey.withOpacity(.5),
                           fontSize: 14,
@@ -44,31 +46,16 @@ class SignUp extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: size.height * .05,
+                height: size.height * .09,
               ),
               GetBuilder<ControllerApp>(builder: (ref) {
                 return Form(
-                    key: ref.formKeyRegister,
+                    key: ref.formKey,
                     child: Column(
                       children: [
                         TextFormField(
-                          decoration: InputDecoration(hintText: 'Name'),
-                          controller: ref.userNameController,
-                          validator: (val) {
-                            if (val == null || val.trim().isEmpty) {
-                              return 'Please enter Your Name';
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(
-                          height: size.height * .03,
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            hintText: 'Email',
-                          ),
-                          controller: ref.emailController,
+                          decoration: InputDecoration(hintText: 'UserName'),
+                          controller: ref.userController,
                           validator: (val) {
                             if (val == null ||
                                 val.trim().isEmpty ||
@@ -92,40 +79,14 @@ class SignUp extends StatelessWidget {
                                     ? Icons.visibility_off_outlined
                                     : Icons.visibility_outlined),
                               )),
-                          controller: ref.passRegisterController,
-                          obscureText: ref.isPass,
+                          controller: ref.passController,
                           validator: (val) {
                             if (val == null || val.trim().isEmpty) {
                               return 'Please enter Your Password';
                             }
                             return null;
                           },
-                        ),
-                        SizedBox(
-                          height: size.height * .03,
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                              hintText: 'Re-Password',
-                              suffixIcon: InkWell(
-                                onTap: () {
-                                  ref.changVisability();
-                                },
-                                child: Icon(ref.isPass
-                                    ? Icons.visibility_off_outlined
-                                    : Icons.visibility_outlined),
-                              )),
-                          controller: ref.rePassController,
                           obscureText: ref.isPass,
-                          validator: (val) {
-                            if (val == null ||
-                                val.trim().isEmpty ||
-                                (ref.passRegisterController.text ==
-                                    ref.rePassController.text)) {
-                              return 'Please enter Correct Password';
-                            }
-                            return null;
-                          },
                         ),
                         SizedBox(
                           height: size.height * .08,
@@ -134,9 +95,9 @@ class SignUp extends StatelessWidget {
                           width: double.infinity,
                           child: ElevatedButton(
                               onPressed: () {
-                                ref.validateRegister();
+                                ref.validateLogin();
                               },
-                              child: Text('Create'.toUpperCase())),
+                              child: Text('log in'.toUpperCase())),
                         )
                       ],
                     ));
@@ -146,15 +107,15 @@ class SignUp extends StatelessWidget {
               ),
               Wrap(
                 children: [
-                  Text('You  Have An Account ',
+                  Text('You Don\'t Have An Account ',
                       style: TextStyle(
                         color: Colors.black87,
                       )),
                   InkWell(
                     onTap: () {
-                      Get.back();
+                      Get.to(SignUp());
                     },
-                    child: Text('Login'),
+                    child: Text('Sign Up'),
                   )
                 ],
               )
