@@ -316,8 +316,12 @@ class _InfoScreenState extends State<InfoScreen> {
                     height: 48,
                     width: double.infinity,
                     child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (logic.dateController.text.isNotEmpty) {
+                            final age = DateTime.now().year -
+                                logic.selectedDate.value.year;
+                            await logic.updateUserInformation(
+                                age, logic.gender);
                             logic.findBmi();
                             Get.offAll(HomeScreen());
                           } else {

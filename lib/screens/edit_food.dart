@@ -4,17 +4,31 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_computing_homework/models/food_model.dart';
 import 'package:mobile_computing_homework/utils/component.dart';
+import 'package:mobile_computing_homework/utils/component.dart';
 
 import '../controller/controller.dart';
 
-class AddFood extends StatefulWidget {
-  const AddFood({Key? key}) : super(key: key);
+class EditFood extends StatefulWidget {
+  FoodModel model;
+
+  EditFood(this.model);
 
   @override
-  State<AddFood> createState() => _AddRecordState();
+  State<EditFood> createState() => _AddRecordState();
 }
 
-class _AddRecordState extends State<AddFood> {
+class _AddRecordState extends State<EditFood> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    final control = Get.find<ControllerApp>();
+    control.nameFoodController.text = widget.model.name;
+    control.caloryFoodController.text = widget.model.calory.toString();
+    control.categoryFoodController.text = widget.model.category;
+    control.imagePicked = null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -39,7 +53,7 @@ class _AddRecordState extends State<AddFood> {
                   child: SizedBox(
                     width: 300,
                     child: Text(
-                      'Add Food',
+                      'Edit Food Details',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.blue,
@@ -186,7 +200,6 @@ class _AddRecordState extends State<AddFood> {
                   margin: EdgeInsets.only(left: 70),
                   width: 250,
                   height: 200,
-                  color: (logic.imagePicked != null) ? null : Colors.blue,
                   child: (logic.imagePicked != null)
                       ? Image.file(
                           File(
@@ -196,7 +209,8 @@ class _AddRecordState extends State<AddFood> {
                           height: double.infinity,
                           fit: BoxFit.fill,
                         )
-                      : null,
+                      : Image.memory(
+                          Utility.dataFromBase64String(widget.model.photo)),
                 ),
                 SizedBox(
                   height: size.height * .02,
@@ -218,15 +232,20 @@ class _AddRecordState extends State<AddFood> {
                               if (logic
                                       .categoryFoodController.text.isNotEmpty &&
                                   logic.caloryFoodController.text.isNotEmpty &&
-                                  logic.nameFoodController.text.isNotEmpty &&
-                                  logic.imagePicked != null) {
-                                logic.uploadFood(FoodModel(
-                                    name: logic.nameFoodController.text,
-                                    category: logic.categoryFoodController.text,
-                                    photo: Utility.base64String(
-                                        await logic.imagePicked!.readAsBytes()),
-                                    calory: double.parse(
-                                        logic.caloryFoodController.text)));
+                                  logic.nameFoodController.text.isNotEmpty) {
+                                logic.updateFood(
+                                    FoodModel(
+                                        name: logic.nameFoodController.text,
+                                        category:
+                                            logic.categoryFoodController.text,
+                                        photo: logic.imagePicked == null
+                                            ? widget.model.photo
+                                            : Utility.base64String(await logic
+                                                .imagePicked!
+                                                .readAsBytes()),
+                                        calory: double.parse(
+                                            logic.caloryFoodController.text)),
+                                    widget.model.id!);
                               } else {
                                 Get.snackbar('Complete Information',
                                     'Please Add All Information');

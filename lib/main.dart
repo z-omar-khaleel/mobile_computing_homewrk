@@ -13,11 +13,12 @@ import 'screens/home_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  final ref = Get.put(ControllerApp());
+  final ref = await Get.put(ControllerApp());
   userId = await SharePref.getData(key: 'user');
   if (userId != null) {
     ref.getUserData();
     ref.fetchRecords();
+    ref.fetchFood();
   }
 
   runApp(MyApp());

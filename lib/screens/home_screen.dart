@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:mobile_computing_homework/screens/add_food.dart';
 import 'package:mobile_computing_homework/screens/login.dart';
+import 'package:mobile_computing_homework/screens/show_food.dart';
 
 import '../controller/controller.dart';
 import 'add_records.dart';
@@ -52,7 +53,7 @@ class HomeScreen extends StatelessWidget {
                       border: Border.all(color: Colors.blue),
                       borderRadius: BorderRadius.circular(12)),
                   child: Text(
-                    '${logic.bmiStatus} (Still Good)',
+                    '${logic.bmiStatus} (${logic.bmiCondition})',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.grey.withOpacity(.7),
@@ -147,7 +148,10 @@ class HomeScreen extends StatelessWidget {
                 SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                        onPressed: () {}, child: Text('View Food'))),
+                        onPressed: () {
+                          Get.to(ShowFood());
+                        },
+                        child: Text('View Food'))),
                 SizedBox(
                   height: size.height * .01,
                 ),

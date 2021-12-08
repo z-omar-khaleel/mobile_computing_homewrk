@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:mobile_computing_homework/models/food_model.dart';
 import 'package:mobile_computing_homework/models/record_info.dart';
 import 'package:mobile_computing_homework/models/user_info.dart';
+import 'package:mobile_computing_homework/screens/home_screen.dart';
 import 'package:mobile_computing_homework/screens/info_screen.dart';
 import 'package:mobile_computing_homework/utils/constant.dart';
 import 'package:mobile_computing_homework/utils/sharePref.dart';
@@ -24,6 +25,7 @@ class ControllerApp extends GetxController {
   var weightController = TextEditingController(text: '10');
   String gender = 'Male';
   String bmiStatus = 'HealthyWeight';
+  String? bmiCondition;
   double? bmi;
   XFile? imagePicked;
 
@@ -40,6 +42,7 @@ class ControllerApp extends GetxController {
   int age = 0;
 
   Rx<DateTime> selectedDate = DateTime.now().obs;
+  Rx<DateTime> selectedNewDate = DateTime.now().obs;
   changVisability() {
     isPass = !isPass;
     update();
@@ -48,6 +51,13 @@ class ControllerApp extends GetxController {
   changeSelectedDate(DateTime time) {
     selectedDate.value = time;
     dateController.text = DateFormat('yyyy-MM-dd').format(selectedDate.value);
+    update();
+  }
+
+  changeNewSelectedDate(DateTime time) {
+    selectedNewDate.value = time;
+    dateController.text =
+        DateFormat('yyyy-MM-dd').format(selectedNewDate.value);
     update();
   }
 
@@ -70,26 +80,69 @@ class ControllerApp extends GetxController {
         .collection('Foods')
         .get()
         .then((value) {
-      print(value.docs.length);
       value.docs.forEach((e) {
         foods.add(FoodModel.fromMap(e.data()));
       });
+      update();
     });
+  }
+
+  updateUserInformation(int age, String gender) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .update({'gender': gender, 'age': age});
+    await getUserData();
+    update();
+  }
+
+  deleteFood(FoodModel model) async {
+    final ref = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('Foods')
+        .doc(model.id)
+        .delete();
+    await fetchFood();
     update();
   }
 
   uploadFood(FoodModel model) async {
-    FirebaseFirestore.instance
+    final ref = await FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
         .collection('Foods')
-        .doc()
-        .set(model.toMap())
-        .then((value) {
-      fetchFood();
+        .doc();
+    ref.set({
+      'name': model.name,
+      'category': model.category,
+      'photo': model.photo,
+      'id': ref.id,
+      'calory': model.calory,
+    }).then((value) async {
+      await fetchFood();
       Get.back();
+      update();
     });
-    update();
+  }
+
+  updateFood(FoodModel model, String id) async {
+    final ref = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('Foods')
+        .doc(id);
+    ref.update({
+      'name': model.name,
+      'category': model.category,
+      'photo': model.photo,
+      'id': ref.id,
+      'calory': model.calory,
+    }).then((value) async {
+      await fetchFood();
+      Get.back();
+      update();
+    });
   }
 
   validateLogin() async {
@@ -104,7 +157,7 @@ class ControllerApp extends GetxController {
             if (value) {
               await getUserData();
 
-              Get.offAll(InfoScreen());
+              Get.offAll(HomeScreen());
             } else {
               Get.snackbar('Error', 'Error in store data');
             }
@@ -131,8 +184,107 @@ class ControllerApp extends GetxController {
         .set(record.toMap())
         .then((value) {
       fetchRecords();
+      update();
     });
-    update();
+  }
+
+  findDifference() {
+    if (records.length > 1) {
+      double diff =
+          double.parse((records[1].bmi - records[0].bmi).toStringAsFixed(1));
+      print('dii$diff');
+      if (records.first.status == 'Underweight') {
+        if (diff < -1) {
+          bmiCondition = 'So Bad';
+        } else if (diff >= -1 && diff < -.6) {
+          bmiCondition = 'So Bad';
+        } else if (diff >= -.6 && diff < -.3) {
+          bmiCondition = 'So Bad';
+        } else if (diff >= -.3 && diff < 0) {
+          bmiCondition = 'Little Changes';
+        } else if (diff >= 0 && diff < .3) {
+          if (diff == 0.0) {
+            bmiCondition = 'Still Good';
+          } else {
+            bmiCondition = 'Little Changes';
+          }
+        } else if (diff >= .3 && diff < .6) {
+          bmiCondition = 'Still Good';
+        } else if (diff >= .6 && diff < 1) {
+          bmiCondition = 'Go Ahead';
+        } else {
+          bmiCondition = 'Go Ahead';
+        }
+      } else if (records.first.status == 'HealthyWeight') {
+        if (diff < -1) {
+          bmiCondition = 'So Bad';
+        } else if (diff >= -1 && diff < -.6) {
+          bmiCondition = 'Be Careful';
+        } else if (diff >= -.6 && diff < -.3) {
+          bmiCondition = 'Be Careful';
+        } else if (diff >= -.3 && diff < 0) {
+          bmiCondition = 'Little Changes';
+        } else if (diff >= 0 && diff < .3) {
+          if (diff == 0) {
+            bmiCondition = 'Still Good';
+          } else {
+            bmiCondition = 'Little Changes';
+          }
+        } else if (diff >= .3 && diff < .6) {
+          bmiCondition = 'Be Careful';
+        } else if (diff >= .6 && diff < 1) {
+          bmiCondition = 'Be Careful';
+        } else {
+          bmiCondition = 'Be Careful';
+        }
+      } else if (records.first.status == 'Overweight') {
+        if (diff < -1) {
+          bmiCondition = 'Be Careful';
+        } else if (diff >= -1 && diff < -.6) {
+          bmiCondition = 'Go Ahead';
+        } else if (diff >= -.6 && diff < -.3) {
+          bmiCondition = 'So Bad';
+        } else if (diff >= -.3 && diff < 0) {
+          bmiCondition = 'Little Changes';
+        } else if (diff >= 0 && diff < .3) {
+          if (diff == 0) {
+            bmiCondition = 'Still Good';
+          } else {
+            bmiCondition = 'Little Changes';
+          }
+        } else if (diff >= .3 && diff < .6) {
+          bmiCondition = 'Be Careful';
+        } else if (diff >= .6 && diff < 1) {
+          bmiCondition = 'So Bad';
+        } else {
+          bmiCondition = 'So Bad';
+        }
+      } else {
+        if (diff < -1) {
+          bmiCondition = 'Go Ahead';
+        } else if (diff >= -1 && diff < -.6) {
+          bmiCondition = 'Go Ahead';
+        } else if (diff >= -.6 && diff < -.3) {
+          bmiCondition = 'Little Changes';
+        } else if (diff >= -.3 && diff < 0) {
+          bmiCondition = 'Little Changes';
+        } else if (diff >= 0 && diff < .3) {
+          if (diff == 0) {
+            bmiCondition = 'Still Good';
+          } else {
+            bmiCondition = 'Be Careful';
+          }
+        } else if (diff >= .3 && diff < .6) {
+          bmiCondition = 'So Bad';
+        } else if (diff >= .6 && diff < 1) {
+          bmiCondition = 'So Bad';
+        } else {
+          bmiCondition = 'So Bad';
+        }
+      }
+    } else {
+      bmiCondition = 'Still Good';
+    }
   }
 
   fetchRecords() async {
@@ -141,7 +293,7 @@ class ControllerApp extends GetxController {
         .collection('users')
         .doc(userId)
         .collection('Records')
-        .orderBy('dateTime')
+        .orderBy('dateTime', descending: true)
         .get()
         .then((value) {
       print(value.docs.length);
@@ -153,8 +305,9 @@ class ControllerApp extends GetxController {
         print(records.first.dateTime);
       }
       ;
+      findDifference();
+      update();
     });
-    update();
   }
 
   createUser(
@@ -163,11 +316,12 @@ class ControllerApp extends GetxController {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(id)
-        .set(user.toJson())
+        .set(user.toMap())
         .then((value) async {
-      SharePref.setData(key: 'user', data: id).then((value) async {
+      await SharePref.setData(key: 'user', data: id).then((value) async {
         if (value) {
           await getUserData();
+          userId = await SharePref.getData(key: 'user');
 
           Get.offAll(InfoScreen());
         } else {}
@@ -183,7 +337,7 @@ class ControllerApp extends GetxController {
                 email: emailController.text,
                 password: passRegisterController.text)
             .then((value) => createUser(
-                email: userController.text,
+                email: emailController.text,
                 name: userNameController.text,
                 id: value.user!.uid));
       } on FirebaseAuthException catch (e) {
@@ -231,7 +385,8 @@ class ControllerApp extends GetxController {
   }
 
   findBmi() {
-    age = DateTime.now().year - selectedDate.value.year;
+    age = userInformation!.age;
+
     double agePercentage = findPercentage(age);
     print(weightController.text);
     double weight = double.parse(weightController.text);
@@ -275,6 +430,7 @@ class ControllerApp extends GetxController {
     if (userId != null) {
       getUserData();
       fetchRecords();
+      fetchFood();
     }
   }
 
@@ -285,7 +441,10 @@ class ControllerApp extends GetxController {
           .doc(userId)
           .get()
           .then((value) {
-        userInformation = UserInformation.fromJson(value.data()!);
+        if (value.data() != null) {
+          userInformation = UserInformation.fromMap(value.data()!);
+          gender = userInformation!.gender;
+        }
       });
     } catch (e) {}
   }
